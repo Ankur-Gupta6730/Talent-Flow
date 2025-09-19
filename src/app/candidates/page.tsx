@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState, useRef, useCallback } from "react";
+import React, { useMemo, useState, useRef, useCallback } from "react";
 import { useCandidates, type Candidate } from "@/features/candidates/api";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { LoadingState, SkeletonTable } from "@/components/ui/LoadingStates";
 import { AlertTriangle, RefreshCw, LayoutGrid } from "lucide-react";
 import { PageLoadingSpinner } from "@/components/ui/LoadingSpinner";
 import Link from "next/link";
-import { useVirtual } from "react-virtual";
+
 
 const STAGES = ["applied","screening","interview","offer","hired","rejected"] as const;
 
@@ -22,14 +22,7 @@ export default function CandidatesPage() {
   const data = rawData as { items: Candidate[]; total: number; page: number; pageSize: number } | undefined;
 
   const all = data?.items ?? [];
-  const parentRef = useRef<HTMLDivElement | null>(null);
-  const estimate = useCallback(() => 64, []);
-  const rowVirtual = useVirtual({
-    size: all.length,
-    parentRef,
-    estimateSize: estimate,
-    overscan: 10,
-  });
+
 
   const totalPages = data ? Math.ceil(data.total / data.pageSize) : 1;
 
@@ -64,10 +57,10 @@ export default function CandidatesPage() {
               <Input 
                 placeholder="Search name or email..." 
                 value={q} 
-                onChange={(e)=>{setQ(e.target.value); setPage(1);}}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>)=>{setQ(e.target.value); setPage(1);}}
                 className="border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
               />
-              <Select onValueChange={(v)=>{ setStage(v as Candidate["stage"] | ""); setPage(1); }} value={stage || undefined}>
+              <Select onValueChange={(v: string)=>{ setStage(v as Candidate["stage"] | ""); setPage(1); }} value={stage || undefined}>
                 <SelectTrigger className="border-gray-200 focus:border-indigo-500 focus:ring-indigo-500">
                   <SelectValue placeholder="Filter by stage..." />
                 </SelectTrigger>
@@ -111,8 +104,8 @@ export default function CandidatesPage() {
           <div className="flex items-center justify-between p-3">
             <div className="text-sm text-muted-foreground">Page {page} / {totalPages}</div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" disabled={page<=1} onClick={()=>setPage(p=>p-1)}>Prev</Button>
-              <Button variant="outline" size="sm" disabled={page>=totalPages} onClick={()=>setPage(p=>p+1)}>Next</Button>
+              <Button variant="outline" size="sm" disabled={page<=1} onClick={()=>setPage((p: number)=>p-1)}>Prev</Button>
+              <Button variant="outline" size="sm" disabled={page>=totalPages} onClick={()=>setPage((p: number)=>p+1)}>Next</Button>
             </div>
           </div>
           </div>
