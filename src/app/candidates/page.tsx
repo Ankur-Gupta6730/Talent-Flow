@@ -83,23 +83,16 @@ export default function CandidatesPage() {
           </Card>
 
           <div className="border-0 rounded-xl shadow-lg bg-white/80 backdrop-blur-sm overflow-hidden">
-          <div className="h-[600px] overflow-auto" ref={parentRef}>
-            <div className="relative w-full" style={{ height: `${rowVirtual.totalSize}px` }}>
-              {rowVirtual.virtualItems.map(vi => {
-                const c = all[vi.index];
-                return (
-                  <div key={vi.key} className="absolute left-0 right-0 px-4" style={{ transform: `translateY(${vi.start}px)` }}>
-                    <div className="flex items-center justify-between h-16 border-b">
-                      <div>
-                        <Link href={`/candidates/${c.id}`} className="font-medium hover:underline">{c.name}</Link>
-                        <div className="text-xs text-muted-foreground">{c.email} • {c.stage}</div>
-                      </div>
-                      <Link href={`/candidates/${c.id}`}><Button size="sm" variant="secondary">Open</Button></Link>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+          <div className="h-[600px] overflow-auto">
+            {all.map((c) => (
+              <div key={c.id} className="flex items-center justify-between h-16 border-b px-4">
+                <div>
+                  <Link href={`/candidates/${c.id}`} className="font-medium hover:underline">{c.name}</Link>
+                  <div className="text-xs text-muted-foreground">{c.email} • {c.stage}</div>
+                </div>
+                <Link href={`/candidates/${c.id}`}><Button size="sm" variant="secondary">Open</Button></Link>
+              </div>
+            ))}
           </div>
           <div className="flex items-center justify-between p-3">
             <div className="text-sm text-muted-foreground">Page {page} / {totalPages}</div>
